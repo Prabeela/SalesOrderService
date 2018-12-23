@@ -1,0 +1,3 @@
+insert into customer_sos(cust_id,cust_email,cust_first_name,cust_last_name) values('66921076-ed1d-458b-9d7d-ce9a227d64a5','s.frg@email.com','lima','rose');
+insert into customer_sos(cust_id,cust_email,cust_first_name,cust_last_name) values('4465afe0-4e8f-4779-90e3-e6b971c4cc7d','lok.frg@email.com','teena','purple');
+insert into customer_sos(cust_id,cust_email,cust_first_name,cust_last_name) values('842c4bd0-32a0-4c6e-8f7a-74c45c23ddf1','hem.frg@email.com','dona','white');
