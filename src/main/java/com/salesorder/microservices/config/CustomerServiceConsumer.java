@@ -18,7 +18,7 @@ public class CustomerServiceConsumer {
 	@Autowired
 	CustomerSOSRepository customerSOSRepository;
 	
-	@RabbitListener(queues = "spring-boot")
+	//@RabbitListener(queues = "spring-boot")
 	public void receiveMessage(CustomQueueMessage custMsg) {
 		System.out.println("Inside Listener");
 		System.out.println("Received <" + custMsg.getText()+"name::"+custMsg.getCustomer().getFirst_name()+">");

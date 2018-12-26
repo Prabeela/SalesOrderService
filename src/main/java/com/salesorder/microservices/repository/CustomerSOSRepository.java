@@ -21,7 +21,7 @@ public class CustomerSOSRepository {
 
     private final String SQL_INSERT = "insert into customer_sos(cust_id,cust_email,cust_first_name,cust_last_name) values(?,?,?,?)";
     private final String SQL_QUERY_ALL = "select * from customer_sos";
-    private final String SQL_QUERY_BY_ID = "select * from customer_sos where id=?";
+    private final String SQL_QUERY_BY_ID = "select * from customer_sos where cust_id=?";
 
     private final RowMapper<Customer> rowMapper = (ResultSet rs, int row) -> {
         Customer customer = new Customer();
