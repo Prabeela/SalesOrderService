@@ -28,6 +28,7 @@ import com.netflix.appinfo.InstanceInfo;
 
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 
 import com.salesorder.microservices.domain.Customer;
 import com.salesorder.microservices.domain.Item;
@@ -41,6 +42,12 @@ public class SalesOrderController {
 	private Logger logger = LoggerFactory.getLogger(getClass());
 	@Autowired
 	private DiscoveryClient discoveryClient;
+	
+	@Autowired
+	  private RestTemplate restTemplate;
+	
+	@Autowired
+	  private LoadBalancerClient loadBalancerClient;
 
 	@Value("${itemServiceAppName}")
 	private String itemServiceAppName;
@@ -105,9 +112,18 @@ public class SalesOrderController {
 		}
 		return price;
 	}
-	private List<Item> fetchItemDetails(ArrayList<String> itemNameList) {
+	private String fetchServiceUrl(String appName) {
+	    ServiceInstance instance = loadBalancerClient.choose(appName);
 
-		String baseUrl = fetchBaseURL(itemServiceAppName);
+	    logger.debug("uri: {}", instance.getUri().toString());
+	    logger.debug("serviceId: {}", instance.getServiceId());
+
+	    return instance.getUri().toString();
+	  }
+	
+	private List<Item> fetchItemDetails(ArrayList<String> itemNameList) {
+		 
+		String baseUrl = fetchServiceUrl(itemServiceAppName);
 
 		System.out.println("Fetching details of item::" + itemNameList.size());
 
@@ -117,7 +133,7 @@ public class SalesOrderController {
 
 			String itemUrl = baseUrl + "/service2/item/" + itemNameList.get(i);
 
-			RestTemplate restTemplate = new RestTemplate();
+			//RestTemplate restTemplate = new RestTemplate();
 			ResponseEntity<Item> response = null;
 			try {
 				response = restTemplate.exchange(itemUrl, HttpMethod.GET, getHeaders(), Item.class);
@@ -139,6 +155,7 @@ public class SalesOrderController {
 	}
 
 	
+	/*
 	private String fetchBaseURL(String servicename) {
 		List<ServiceInstance> instances = discoveryClient.getInstances(servicename);
 		ServiceInstance serviceInstance = instances.get(0);
@@ -146,6 +163,7 @@ public class SalesOrderController {
 		String baseUrl = serviceInstance.getUri().toString();
 		return baseUrl;
 	}
+	*/
 
 	private static HttpEntity<?> getHeaders() throws IOException {
 		HttpHeaders headers = new HttpHeaders();
