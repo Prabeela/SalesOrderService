@@ -56,7 +56,7 @@ public class SalesOrderController {
 	@PostMapping("/service3/orders")
 	public ResponseEntity add(@RequestBody SalesOrder salesOrder) {
 		
-		System.out.println("(salesOrder.getId()))::::::::: "+salesOrder.getId());
+		logger.debug("(salesOrder.getId()))::::::::: "+salesOrder.getId());
 
 		List<Item> itemlist = salesOrderService.fetchItemDetails(salesOrder.getItems());
 		
@@ -71,8 +71,10 @@ public class SalesOrderController {
 
 			return new ResponseEntity<List<Item>>(itemlist, HttpStatus.OK);
 		}
-		else
+		else {
+			logger.debug("Invalid customer id ::::::::: "+_customer.getId());
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
 
 	}
 

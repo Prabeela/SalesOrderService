@@ -31,6 +31,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 
 import com.salesorder.microservices.domain.Customer;
 import com.salesorder.microservices.domain.Item;
@@ -39,6 +40,7 @@ import com.salesorder.microservices.repository.CustomerSOSRepository;
 import com.salesorder.microservices.repository.SalesOrderRepository;
 
 @Service
+@RefreshScope
 public class SalesOrderService {
 
 	private Logger logger = LoggerFactory.getLogger(getClass());
