@@ -3,7 +3,8 @@ package com.salesorder.microservices.repository;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -21,7 +22,7 @@ public class SalesOrderRepository {
     private final String SQL_INSERT_SALES_ORDER_TBL = "insert into sales_order_541455(id,total_price,order_desc,cust_id,order_date) values(?,?,?,?,?)";
     private final String SQL_INSERT_ORDER_LINE_ITEM_TBL = "insert into order_line_item_541455(id,item_name,item_quantity,order_id) values(?,?,?,?)";
     
-   
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     public SalesOrderRepository(JdbcTemplate template) {
@@ -33,6 +34,8 @@ public class SalesOrderRepository {
         assert salesOrder.getCust_id() != null;
         assert salesOrder.getDescription() != null;
         assert salesOrder.getPrice()!=null;
+        
+        logger.debug("insert sales order table:: "+salesOrder.getId());
 
         this.jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(SQL_INSERT_SALES_ORDER_TBL);
@@ -56,6 +59,7 @@ public class SalesOrderRepository {
         assert salesOrder.getDescription() != null;
         assert salesOrder.getPrice()!=null;
 
+        logger.debug("insert order line item:: "+item.getName());
         this.jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(SQL_INSERT_ORDER_LINE_ITEM_TBL);
             ps.setString(1, java.util.UUID.randomUUID().toString());

@@ -12,4 +12,9 @@ management:
   security:
     enabled: false
     
+logging: # <----New sections below
+  level: 
+    com:
+      salesorder: DEBUG
+    
 

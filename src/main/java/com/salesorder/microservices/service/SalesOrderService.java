@@ -104,44 +104,52 @@ public class SalesOrderService {
 	  }
 	
 	
-	@HystrixCommand(fallbackMethod = "defaultItem")
+	
 	public List<Item> fetchItemDetails(ArrayList<String> itemNameList) {
 		 
 		String baseUrl = fetchServiceUrl(itemServiceAppName);
 
-		System.out.println("Fetching details of item::" + itemNameList.size());
+		logger.debug("Fetching details of item::" + itemNameList.size());
 
 		List<Item> itemList = new ArrayList<Item>();
 		for (int i = 0; i < itemNameList.size(); i++) {
-			System.out.println("Fetching details of item::" + itemNameList.get(i));
+			logger.debug("Fetching details of item::" + itemNameList.get(i));
 
 			String itemUrl = baseUrl + "/service2/item/" + itemNameList.get(i);
 
 			//RestTemplate restTemplate = new RestTemplate();
 			ResponseEntity<Item> response = null;
-			try {
-				response = restTemplate.exchange(itemUrl, HttpMethod.GET, getHeaders(), Item.class);
-			} catch (NullPointerException e) {
-				System.out.print("NullPointerException Caught");
-			} catch (Exception ex) {
-				// System.out.println(ex);
-
+			String res=getItem(itemUrl);
+			if(res!="not found")
+			{
+				try {
+						
+					response = restTemplate.exchange(itemUrl, HttpMethod.GET, getHeaders(), Item.class);
+				} catch (NullPointerException e) {
+					logger.debug("NullPointerException Caught");
+				} catch (Exception ex) {
+					// System.out.println(ex);
+	
+				}
+	
+				if (response != null && response.hasBody() && response.getBody() != null) {
+					logger.debug("not null");
+					logger.debug("::",response.getBody());
+					itemList.add(response.getBody());
+				} 
 			}
-
-			if (response != null && response.hasBody() && response.getBody() != null) {
-				System.out.println("not null");
-				System.out.println(response.getBody());
-				itemList.add(response.getBody());
-			} 
 
 		}
 		return itemList;
 	}
-
-	
+	@HystrixCommand(fallbackMethod = "defaultItem")
+	public String getItem(String itemurl) {
+		return restTemplate.getForObject(itemurl, String.class);
+		
+	}
 	 public String defaultItem() {
 		    logger.debug("Default Item used.");
-		    return "Item Service is not reachable. Try another.";
+		    return "not found";
 		  }
 
 	private static HttpEntity<?> getHeaders() throws IOException {

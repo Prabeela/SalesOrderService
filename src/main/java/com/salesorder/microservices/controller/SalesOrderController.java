@@ -75,8 +75,10 @@ public class SalesOrderController {
 
 		List<Item> itemlist = salesOrderService.fetchItemDetails(salesOrder.getItems());
 		
+		
 		Customer _customer=customerSOSRepository.findOne(salesOrder.getCust_id());
 		
+		logger.debug("(_customer.getId()))::::::::: "+_customer.getId());
 		if(_customer!=null && _customer.getId()!=null) {
 			Integer price=salesOrderService.saveItemList(itemlist,salesOrder);
 			
