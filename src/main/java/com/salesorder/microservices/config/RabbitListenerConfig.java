@@ -30,6 +30,6 @@ public class RabbitListenerConfig {
 
 	    @Bean
 	    public Queue queue(){
-	        return new Queue("spring-boot", false);
+	        return new Queue("spring-boot-customer-541455", false);
 	    }
 }

@@ -10,6 +10,9 @@ import com.salesorder.microservices.domain.CustomQueueMessage;
 import com.salesorder.microservices.domain.Customer;
 import com.salesorder.microservices.repository.CustomerSOSRepository;
 import com.rabbitmq.client.AMQP.Exchange;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.amqp.core.Queue;
 
 @Service
@@ -18,10 +21,12 @@ public class CustomerServiceConsumer {
 	@Autowired
 	CustomerSOSRepository customerSOSRepository;
 	
-	//@RabbitListener(queues = "spring-boot")
+	private Logger logger = LoggerFactory.getLogger(getClass());
+	
+	@RabbitListener(queues = "spring-boot-customer-541455")
 	public void receiveMessage(CustomQueueMessage custMsg) {
-		System.out.println("Inside Listener");
-		System.out.println("Received <" + custMsg.getText()+"name::"+custMsg.getCustomer().getFirst_name()+">");
+		logger.debug("Inside Listener");
+		logger.debug("Received <" + custMsg.getText()+"name::"+custMsg.getCustomer().getFirst_name()+">");
 		Customer _customer = customerSOSRepository.save(custMsg.getCustomer());
 	}
 	 

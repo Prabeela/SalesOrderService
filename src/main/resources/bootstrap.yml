@@ -2,6 +2,14 @@ server:
   port: 8083
 spring:
   application:
-    name: salesorder-service-541455
+    name: 541455-salesorder-service
+
+security:
+  basic:
+    enabled: false # turn off securing our application endpoints
+
+management:
+  security:
+    enabled: false
     
 

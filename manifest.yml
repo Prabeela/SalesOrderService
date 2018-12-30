@@ -1,0 +1,10 @@
+---
+applications:
+- name: 541455-salesorder-service
+  memory: 1G
+  instances: 1
+  path: target/salesorder-0.0.1-SNAPSHOT.jar
+  services:
+  - amqp
+  - mysqlService
+  - serviceregistry

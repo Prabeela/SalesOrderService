@@ -18,8 +18,8 @@ public class SalesOrderRepository {
 	
 	private final JdbcTemplate jdbcTemplate;
 
-    private final String SQL_INSERT_SALES_ORDER_TBL = "insert into sales_order(id,total_price,order_desc,cust_id,order_date) values(?,?,?,?,?)";
-    private final String SQL_INSERT_ORDER_LINE_ITEM_TBL = "insert into order_line_item(id,item_name,item_quantity,order_id) values(?,?,?,?)";
+    private final String SQL_INSERT_SALES_ORDER_TBL = "insert into sales_order_541455(id,total_price,order_desc,cust_id,order_date) values(?,?,?,?,?)";
+    private final String SQL_INSERT_ORDER_LINE_ITEM_TBL = "insert into order_line_item_541455(id,item_name,item_quantity,order_id) values(?,?,?,?)";
     
    
 
