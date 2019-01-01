@@ -96,6 +96,7 @@ public class SalesOrderService {
 	
 	private String fetchServiceUrl(String appName) {
 	    ServiceInstance instance = loadBalancerClient.choose(appName);
+	    	
 
 	    logger.debug("uri: {}", instance.getUri().toString());
 	    logger.debug("serviceId: {}", instance.getServiceId());
@@ -116,40 +117,45 @@ public class SalesOrderService {
 			logger.debug("Fetching details of item::" + itemNameList.get(i));
 
 			String itemUrl = baseUrl + "/service2/item/" + itemNameList.get(i);
+			logger.debug("item url is ::"+itemUrl);
+			itemList.add(getItem(itemUrl));	
 
 			//RestTemplate restTemplate = new RestTemplate();
-			ResponseEntity<Item> response = null;
-			String res=getItem(itemUrl);
-			if(res!="not found")
-			{
-				try {
-						
-					response = restTemplate.exchange(itemUrl, HttpMethod.GET, getHeaders(), Item.class);
-				} catch (NullPointerException e) {
-					logger.debug("NullPointerException Caught");
-				} catch (Exception ex) {
-					// System.out.println(ex);
-	
-				}
-	
-				if (response != null && response.hasBody() && response.getBody() != null) {
-					logger.debug("not null");
-					logger.debug("::",response.getBody());
-					itemList.add(response.getBody());
-				} 
-			}
-
+			
 		}
 		return itemList;
 	}
+	
 	@HystrixCommand(fallbackMethod = "defaultItem")
-	public String getItem(String itemurl) {
-		return restTemplate.getForObject(itemurl, String.class);
+	public Item getItem(String itemUrl) {
+		ResponseEntity<Item> response = null;
 		
+			try {
+					
+				response = restTemplate.exchange(itemUrl, HttpMethod.GET, getHeaders(), Item.class);
+			} catch (NullPointerException e) {
+				logger.debug("NullPointerException Caught");
+			} catch (Exception ex) {
+				// System.out.println(ex);
+
+			}
+
+			if (response != null && response.hasBody() && response.getBody() != null) {
+				logger.debug("not null");
+				logger.debug("::",response.getBody());
+				
+			} 
+			return response.getBody();
+
 	}
-	 public String defaultItem() {
+	
+	
+	 public Item defaultItem() {
 		    logger.debug("Default Item used.");
-		    return "not found";
+		    Item item = new Item();
+		    item.setName("default-item");
+		    item.setDescription("defualt-item-description");
+		    return item;
 		  }
 
 	private static HttpEntity<?> getHeaders() throws IOException {
